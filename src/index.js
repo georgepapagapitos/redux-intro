@@ -3,10 +3,37 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+
+// Like:
+// const [clickCount, setClickCount] = useState(0)
+
+// This is a 'Reducer'
+// It returns the value of our 'clickCount' state
+const clickCount = (state = 0, action) => {
+  return state;
+};
+
+const elementList = (state = ['Hydrogen', 'Helium'], action) => {
+  return state;
+}
+
+// "store" === "global state"
+const store = createStore(
+  combineReducers({
+    // This is what the store will look like
+    clickCount,   // same as clickCount: clickCount
+    elementList,  // same as elementList: elementList
+  })
+);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* Share our redux store with our React app */}
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
