@@ -12,10 +12,29 @@ import { Provider } from 'react-redux';
 // This is a 'Reducer'
 // It returns the value of our 'clickCount' state
 const clickCount = (state = 0, action) => {
+  console.log('clickCount action:', action, 'state', state);
+
+  if(action.type === 'INCREASE_CLICK_COUNT') {
+    return state + 1;
+  }
+  if(action.type === 'DECREASE_CLICK_COUNT') {
+    return state - 1;
+  }
+
   return state;
 };
 
 const elementList = (state = ['Hydrogen', 'Helium'], action) => {
+  switch(action.type) {
+    case 'ADD_ELEMENT':
+      console.log(action);
+
+      // This mutates the original array:
+      // state.push(action.payload);
+
+      // Instead make a clone of state
+      return [...state, action.payload];
+  }
   return state;
 }
 
