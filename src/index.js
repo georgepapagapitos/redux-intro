@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import logger from 'redux-logger';
 
 // Like:
 // const [clickCount, setClickCount] = useState(0)
@@ -12,23 +13,18 @@ import { Provider } from 'react-redux';
 // This is a 'Reducer'
 // It returns the value of our 'clickCount' state
 const clickCount = (state = 0, action) => {
-  console.log('clickCount action:', action, 'state', state);
-
   if(action.type === 'INCREASE_CLICK_COUNT') {
     return state + 1;
   }
   if(action.type === 'DECREASE_CLICK_COUNT') {
     return state - 1;
   }
-
   return state;
 };
 
 const elementList = (state = ['Hydrogen', 'Helium'], action) => {
   switch(action.type) {
     case 'ADD_ELEMENT':
-      console.log(action);
-
       // This mutates the original array:
       // state.push(action.payload);
 
@@ -44,7 +40,9 @@ const store = createStore(
     // This is what the store will look like
     clickCount,   // same as clickCount: clickCount
     elementList,  // same as elementList: elementList
-  })
+  }),
+  // Redux logger
+  applyMiddleware(logger)
 );
 
 ReactDOM.render(

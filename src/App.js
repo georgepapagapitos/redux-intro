@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 function App() {
@@ -8,24 +9,22 @@ function App() {
   // Give us access to the Redux dispatch() function
   const dispatch = useDispatch();
 
+  // Track value of new element input field
+  const [newElement, setNewElement] = useState('');
+
   // Grab the clickCount from our redux store
   const clickCount = useSelector((store) => {
-    console.log('store.clickCount:', store.clickCount);
     // This return value will be assigned to 'clickCount'
     return store.clickCount;
   });
 
   //  Grab elementList from our redux store
   const elementList = useSelector((store) => {
-    console.log('store.elementList', store.elementList);
     // This return value will be assigned to 'elementList'
     return store.elementList;
   })
 
-  console.log('clickCount is:', clickCount);
-
   const increase = () => {
-    console.log('increase');
     // This is what we'd do before in React useState()-land
     // setClickCount(clickCount + 1)
 
@@ -38,7 +37,6 @@ function App() {
   };
 
   const decrease = () => {
-    console.log('decrease');
     dispatch({
       type: 'DECREASE_CLICK_COUNT'
     });
@@ -51,6 +49,15 @@ function App() {
     });
   };
 
+  const addElement = (event) => {
+    event.preventDefault();
+    dispatch({
+      type: 'ADD_ELEMENT',
+      payload: newElement,
+    })
+    setNewElement('');
+  }
+
   return (
     <>
       <h1>🎉 FIRST REDUX APP!!!! 🎉</h1>
@@ -59,6 +66,17 @@ function App() {
       <button onClick={increase}>Increase</button>
       <button onClick={decrease}>Decrease</button>
       <h2>Table of Elements</h2>
+      <form onSubmit={addElement}>
+        <h3>Add a new element</h3>
+        <input 
+          type="text"
+          placeholder="Element name"
+          // These two lines bind our local state to this input field
+          value={newElement}
+          onChange={(event) => setNewElement(event.target.value)}
+        />
+        <button>Add</button>
+      </form>
       <ul>
         {elementList.map((element, index) => {
           return <li key={index}>{element}</li>
